@@ -1,0 +1,10 @@
+# Phase 0 inventories contain local device identities. Never commit them.
+*.local.json
+*.local.txt
+/.phase0/
+__pycache__/
+/.tools/
+/artifacts/
+**/bin/
+**/obj/
+/.vs/

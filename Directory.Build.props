@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Deterministic>true</Deterministic>
+    <BuildId Condition="'$(BuildId)' == ''">Phase5-dev</BuildId>
+  </PropertyGroup>
+  <ItemGroup>
+    <AssemblyMetadata Include="BuildId" Value="$(BuildId)" />
+  </ItemGroup>
+</Project>

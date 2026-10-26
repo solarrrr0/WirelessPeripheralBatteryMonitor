@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PeripheralBatteryTray.Core/PeripheralBatteryTray.Core.csproj" />
+    <Project Path="src/PeripheralBatteryTray.Windows/PeripheralBatteryTray.Windows.csproj" />
+    <Project Path="src/PeripheralBatteryTray.App/PeripheralBatteryTray.App.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PeripheralBatteryTray.App.Tests/PeripheralBatteryTray.App.Tests.csproj" />
+    <Project Path="tests/PeripheralBatteryTray.Tests/PeripheralBatteryTray.Tests.csproj" />
+    <Project Path="tests/PeripheralBatteryTray.Windows.Tests/PeripheralBatteryTray.Windows.Tests.csproj" />
+  </Folder>
+</Solution>
