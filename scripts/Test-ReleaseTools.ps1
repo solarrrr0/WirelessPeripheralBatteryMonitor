@@ -140,6 +140,11 @@ Case P17 {
 }
 Case P18 {
     $r = New-CandidateAcceptance $BuildId @(FixtureSummaries); Assert-CandidateAcceptance $r $BuildId
+    $appSummary = $r.Automatic | Where-Object Suite -eq 'App'
+    $appSummary.Cases=27; Reject { Assert-CandidateAcceptance $r $BuildId }
+    $r.PSObject.Properties.Remove('AutomaticContractVersion'); Assert-CandidateAcceptance $r $BuildId
+    Check ($appSummary.Cases -eq 27)
+    $r = New-CandidateAcceptance $BuildId @(FixtureSummaries)
     Check (@($r.Gates | Where-Object Status -eq 'NotRun').Count -eq 29)
     $r.Gates[0].Status='Passed'; Reject { Assert-CandidateAcceptance $r $BuildId }; $r.Gates[0].Status='NotRun'
     $r.Capability='GattEnabled'; Reject { Assert-CandidateAcceptance $r $BuildId }; $r.Capability='WindowsPropertyAndDeviceSettings'

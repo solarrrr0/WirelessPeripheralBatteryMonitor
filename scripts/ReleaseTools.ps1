@@ -79,7 +79,7 @@ function Get-ReleaseCases {
     switch ($Suite) {
         Core { @(1..29 | ForEach-Object { 'C{0:00}' -f $_ }) + @('A01','A02','A03','LB01','LB02','LB03') }
         Windows { @(1..24 | ForEach-Object { 'W{0:00}' -f $_ }) + @(1..24 | ForEach-Object { 'G{0:00}' -f $_ }) + @('F01','J02','AT01','AT02','AT03','AT04') + @(6..13 | ForEach-Object { 'P{0:00}' -f $_ }) }
-        App { @('P01','P02','P03','P04','P05','J01','M01','H01','H02','H03','H04','H05','AA01','AA02','AA03','AA04','AA05','AA06','NA01','NA02','NA03','DP01','DP02','DP03','DP04','DP05','DP06') }
+        App { @('P01','P02','P03','P04','P05','J01','M01','H01','H02','H03','H04','H05','AA01','AA02','AA03','AA04','AA05','AA06','NA01','NA02','NA03','DP01','DP02','DP03','DP04','DP05','DP06','DP07','DP08','DP09') }
         Release { @('P14','P15','P16','P17','P18') }
         Regression {
             @('Three explicitly simulated devices','Tray configured visible; startup popup hidden','Band remains a band; offline remains offline',
@@ -161,15 +161,17 @@ function Assert-CandidateTree {
 
 function New-CandidateAcceptance {
     param([string]$BuildId, [object[]]$Automatic)
-    [pscustomobject]@{ SchemaVersion = 1; BuildId = $BuildId; Capability = 'WindowsPropertyAndDeviceSettings'; Overall = 'CandidateIncompleteHardware';
+    [pscustomobject]@{ SchemaVersion = 1; AutomaticContractVersion = 2; BuildId = $BuildId; Capability = 'WindowsPropertyAndDeviceSettings'; Overall = 'CandidateIncompleteHardware';
         Automatic = @($Automatic); Gates = @(@(1..5 | ForEach-Object { 'H' + $_ }) + @(1..6 | ForEach-Object { 'V' + $_ }) + @('TrayMouse','ExplorerRestart','SystemDpi','ResourceOnline','ResourceOffline','24Hour','AtkInterface','AtkReplySemantics','AtkRead','AtkCoexistence','AL1','AL2','AL3','AL4','NL1','NL2','DL1','SL1') |
         ForEach-Object { [pscustomobject]@{ Id = $_; Status = 'NotRun'; Reason = 'Not executed for this candidate; historical or simulated results do not replace it.' } }) }
 }
 function Assert-CandidateAcceptance {
     param($Report, [string]$BuildId)
     if ($Report.BuildId -cne $BuildId -or $Report.Capability -notin @('WindowsPropertyOnly','WindowsPropertyAndManualAtk','WindowsPropertyAndOptInAtk','WindowsPropertyOptInAtkAndAlerts','WindowsPropertyAndDeviceSettings') -or $Report.Overall -ne 'CandidateIncompleteHardware') { throw 'Candidate capability or completion claim invalid.' }
+    if ($null -ne $Report.AutomaticContractVersion -and $Report.AutomaticContractVersion -ne 2) { throw 'Unknown automatic evidence contract.' }
+    if ($Report.AutomaticContractVersion -eq 2 -and $Report.Capability -ne 'WindowsPropertyAndDeviceSettings') { throw 'Evidence contract capability mismatch.' }
     $counts = @{ Core=$(if ($Report.Capability -in @('WindowsPropertyOptInAtkAndAlerts','WindowsPropertyAndDeviceSettings')) {35} else {32}); Windows=62;
-        App=$(switch ($Report.Capability) { 'WindowsPropertyAndDeviceSettings' {27} 'WindowsPropertyOptInAtkAndAlerts' {21} 'WindowsPropertyAndOptInAtk' {18} 'WindowsPropertyAndManualAtk' {12} default {10} }); Regression=23; Release=5 }
+        App=$(switch ($Report.Capability) { 'WindowsPropertyAndDeviceSettings' {if ($Report.AutomaticContractVersion -eq 2) {30} else {27}} 'WindowsPropertyOptInAtkAndAlerts' {21} 'WindowsPropertyAndOptInAtk' {18} 'WindowsPropertyAndManualAtk' {12} default {10} }); Regression=23; Release=5 }
     if (@($Report.Automatic).Count -ne 5 -or (Compare-Object @($counts.Keys) @($Report.Automatic.Suite))) { throw 'Missing automatic evidence summary.' }
     foreach ($suite in $Report.Automatic) {
         if ($suite.Cases -ne $counts[$suite.Suite] -or $suite.Status -ne 'Passed' -or $suite.ReportSha256 -notmatch '^[A-Fa-f0-9]{64}$') { throw 'Invalid automatic evidence summary.' }

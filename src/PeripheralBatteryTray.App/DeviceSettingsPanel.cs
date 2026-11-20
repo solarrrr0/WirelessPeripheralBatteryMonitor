@@ -7,6 +7,7 @@ internal sealed class DeviceSettingsPanel : TableLayoutPanel
     internal DataGridView Grid { get; }
     internal ComboBox SortChoice { get; }
     internal ComboBox IconChoice { get; }
+    internal ComboBox StyleChoice { get; }
     internal DeviceSettingsPanel(DisplaySettings current, IReadOnlyList<PresentedDevice> devices)
     {
         Dock = DockStyle.Fill; Padding = new(10); ColumnCount = 1; RowCount = 4;
@@ -22,6 +23,12 @@ internal sealed class DeviceSettingsPanel : TableLayoutPanel
         IconChoice.Items.AddRange(["一个总图标", "每设备图标（保留总图标）"]); IconChoice.SelectedIndex = (int)current.IconMode;
         choices.Controls.Add(new Label { Text = "排序", AutoSize = true }); choices.Controls.Add(SortChoice);
         choices.Controls.Add(new Label { Text = "托盘", AutoSize = true }); choices.Controls.Add(IconChoice);
+        StyleChoice = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 170 };
+        StyleChoice.Items.AddRange(["电池图标", "数字电量（不带%）"]); StyleChoice.SelectedIndex = (int)current.IconStyle;
+        var styleRow = new FlowLayoutPanel { AutoSize = true, Width = 620 };
+        styleRow.Controls.Add(new Label { Text = "图标样式", AutoSize = true }); styleRow.Controls.Add(StyleChoice);
+        styleRow.Controls.Add(new Label { Text = "鼠标蓝色 · 蓝牙绿色 · 低电量红色", AutoSize = true });
+        choices.Controls.Add(styleRow);
         Controls.Add(choices, 0, 1);
         Grid = new DataGridView { Dock = DockStyle.Fill, AllowUserToAddRows = false, AllowUserToDeleteRows = false,
             AllowUserToResizeRows = false, RowHeadersVisible = false, AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
@@ -47,7 +54,7 @@ internal sealed class DeviceSettingsPanel : TableLayoutPanel
         var reset = new Button { Text = "恢复所选默认", AutoSize = true };
         reset.Click += (_, _) => { if (Grid.CurrentRow is { } row) { Grid.CancelEdit(); row.Cells[1].Value = ""; row.Cells[2].Value = false; } };
         footer.Controls.Add(reset);
-        footer.Controls.Add(new Label { AutoSize = true, Text = "最多保存64个设备；独立图标最多16个。\n设备列表在打开设置时更新；Windows可能收起托盘图标。", Margin = new(8) });
+        footer.Controls.Add(new Label { AutoSize = true, Text = "最多保存64个设备；独立图标最多16个。\n数字：离线为横线，未知为问号；系统电量悬停可看来源。\nWindows可能收起图标，可自行拖到任务栏右侧。", Margin = new(8) });
         Controls.Add(footer, 0, 3);
     }
     internal bool TryRead(out DisplaySettings display, out string error)
@@ -63,7 +70,8 @@ internal sealed class DeviceSettingsPanel : TableLayoutPanel
             if (alias.Length > 0 || hidden) preferences.Add((string)row.Tag!, new(alias, hidden));
         }
         if (preferences.Count > DisplaySettings.MaxDevices) { error = "最多为64个设备保存别名或隐藏设置，请先恢复部分默认值。"; return false; }
-        display = new((DeviceSort)SortChoice.SelectedIndex, (TrayIconMode)IconChoice.SelectedIndex, preferences);
+        display = new((DeviceSort)SortChoice.SelectedIndex, (TrayIconMode)IconChoice.SelectedIndex, preferences,
+            (TrayIconStyle)StyleChoice.SelectedIndex);
         return true;
     }
 }

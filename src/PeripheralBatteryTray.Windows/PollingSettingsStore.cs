@@ -125,6 +125,7 @@ public sealed class PollingSettingsStore
             if (updated["notifications"] is not JsonObject) updated["notifications"] = notifications;
             JsonObject presentation = updated["display"] as JsonObject ?? new();
             presentation["sort"] = display.Sort.ToString(); presentation["iconMode"] = display.IconMode.ToString();
+            presentation["iconStyle"] = display.IconStyle.ToString();
             var previousDevices = presentation["devices"] as JsonObject;
             var preferences = new JsonObject();
             foreach (var pair in display.Devices)
@@ -168,6 +169,10 @@ public sealed class PollingSettingsStore
             || !Enum.TryParse<TrayIconMode>(mode.GetString(), out var icons) || mode.GetString() != icons.ToString() || !Enum.IsDefined(icons)
             || !element.TryGetProperty("devices", out var devices)) throw new JsonException();
         Object(devices);
+        TrayIconStyle style = TrayIconStyle.Battery;
+        if (element.TryGetProperty("iconStyle", out var iconStyle)
+            && (iconStyle.ValueKind != JsonValueKind.String || !Enum.TryParse(iconStyle.GetString(), out style)
+                || iconStyle.GetString() != style.ToString() || !Enum.IsDefined(style))) throw new JsonException();
         var entries = new List<KeyValuePair<string, DevicePreference>>();
         foreach (var pair in devices.EnumerateObject())
         {
@@ -177,6 +182,6 @@ public sealed class PollingSettingsStore
                 || !pair.Value.TryGetProperty("hidden", out var hidden) || hidden.ValueKind is not (JsonValueKind.True or JsonValueKind.False)) throw new JsonException();
             entries.Add(new(pair.Name, new(alias.GetString()!, hidden.GetBoolean())));
         }
-        return new(order, icons, entries);
+        return new(order, icons, entries, style);
     }
 }

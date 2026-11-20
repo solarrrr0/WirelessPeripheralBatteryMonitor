@@ -1,0 +1,579 @@
+{
+  "SchemaVersion": 1,
+  "BuildId": "Phase5-20261026-114919-81ab3423",
+  "Stage": "Phase5",
+  "Capability": "WindowsPropertyAndDeviceSettings",
+  "Tfm": "net10.0-windows10.0.19041.0",
+  "Rid": "win-x64",
+  "SelfContained": false,
+  "PublishMode": "framework-dependent multi-file",
+  "BuildSdk": "10.0.402",
+  "ConfigSchema": 4,
+  "PdbIncluded": false,
+  "SourceInputs": [
+    {
+      "Path": "Directory.Build.props",
+      "Sha256": "5B267B6F38AA71994D6E7B61D1D20214B93BDD695D0807827460D46E182FE0B4"
+    },
+    {
+      "Path": "docs/ATK_PROTOCOL_RESEARCH.md",
+      "Sha256": "9C9B8562F6EEA72397C80F70887EB3A47D53DC664C2EBC79EB46CCC6F5CDC32C"
+    },
+    {
+      "Path": "docs/PHASE3_ATK_AUTO_REFRESH_SPEC.md",
+      "Sha256": "209644A52C001DD50D9325BF9F55788BAECDBD9D4D4ACCFE082AB8060473655A"
+    },
+    {
+      "Path": "docs/PHASE4_DEVICE_SETTINGS.md",
+      "Sha256": "D65B33730B0067C83DE9A211C560553307461BE56CB37211F7921695005B6E39"
+    },
+    {
+      "Path": "docs/PHASE4_LOW_BATTERY.md",
+      "Sha256": "7756F84FFE306A57EEC1C2AC9DF7AD6BC2D96A448E9FFBBE285CD337B5628EAB"
+    },
+    {
+      "Path": "docs/release/DEVICE_COMPATIBILITY.md",
+      "Sha256": "ADDD0635C22496E4A8028CB27DBAE6E78EA0AEE7BD656D41462457B66C731EBC"
+    },
+    {
+      "Path": "docs/release/PHASE2_VALIDATION.md",
+      "Sha256": "F3C0E58C70C846CD90BFE9B4DF016D8D2D0AE917E79F918D3474DB3988AED51D"
+    },
+    {
+      "Path": "docs/release/README_中文.md",
+      "Sha256": "FDCBAC5CC802AF84983AB8EF6D663F6B0410E13A3CFA7604B7E214104CF09302"
+    },
+    {
+      "Path": "docs/release/RESOURCE_BENCHMARK.md",
+      "Sha256": "80AD1E58A84198E36B2978DEA03E23945F5E21A71A308F1F1753B9D019D3F901"
+    },
+    {
+      "Path": "docs/release/TROUBLESHOOTING.md",
+      "Sha256": "5CFE5EB25AFCB874C9E1187387916CB7A8FABDF14D6686E8FAEDACF244899143"
+    },
+    {
+      "Path": "global.json",
+      "Sha256": "20C93CA7812D0A9825EEF71217156F95AB2F4FE5AADFEB22EBC1C24B630018D3"
+    },
+    {
+      "Path": "licenses/CsWinRT-LICENSE.txt",
+      "Sha256": "9906940F61B1F0B533FA7D99BAF55178B2808FBE113EA51DFBFAD8572CCD5F2B"
+    },
+    {
+      "Path": "licenses/Windows-SDK-license.rtf",
+      "Sha256": "DD07EB178E00C6BBA4148457FC00FF77CD4887EB521D504186FE59C9EC8BBE62"
+    },
+    {
+      "Path": "PeripheralBatteryTray.slnx",
+      "Sha256": "7D57DB268BF6479FD196A20E8CFCACB54747F7E258363E016E879AD59F585629"
+    },
+    {
+      "Path": "scripts/Collect-DeviceInventory.ps1",
+      "Sha256": "AADC921E6E6EFC83241F9E8ED49AF96E14FEA48DD6165D935AD15DF7884AF90F"
+    },
+    {
+      "Path": "scripts/Compare-PublishModes.ps1",
+      "Sha256": "E3DDCFF6255481B9DAF07879C519945F307D86B3B89A608D0C039EFE88A7D0F9"
+    },
+    {
+      "Path": "scripts/Get-HidCapabilities.ps1",
+      "Sha256": "160595274F2A6546B7C0A7505F5002E394885EDEE7549C600DF3D4BFB24472C5"
+    },
+    {
+      "Path": "scripts/HidDescriptors.cs",
+      "Sha256": "D3C1D8144917AFC0830C73F2F71A958F03D26D10DFB1B5367837FA478BC56910"
+    },
+    {
+      "Path": "scripts/launchers/Check-ATK.cmd",
+      "Sha256": "DD657B193DBEE3B9642A25B54DA0E662ADF7B03AB85F405F22C93261DFF7653D"
+    },
+    {
+      "Path": "scripts/launchers/Check-Bluetooth.cmd",
+      "Sha256": "D3FA93F031B576A3432D1C84D48BF06F3C7978D5B637A4DE06C3B80451584FD0"
+    },
+    {
+      "Path": "scripts/launchers/Start.cmd",
+      "Sha256": "EA63BE0D49A43DBB3C7C4715CE0633DB18E3F640F4182BA9C860530F1CE357F2"
+    },
+    {
+      "Path": "scripts/Measure-HaloBaseline.ps1",
+      "Sha256": "6CF79959AC2F8AE559FD896276FA09168F22D69F91B0C0471278360E9422C518"
+    },
+    {
+      "Path": "scripts/Measure-Phase1.ps1",
+      "Sha256": "55CFBA6028DA5FAF1D1A68843C41CF2017F2450D80AA3CE15A103FA2BDD11FF8"
+    },
+    {
+      "Path": "scripts/Measure-Phase2.ps1",
+      "Sha256": "89D0F159358AED05F00D9A8FF3488ACB601221D2C7A7EC852897711E2FD8DC94"
+    },
+    {
+      "Path": "scripts/ProcessMemory.cs",
+      "Sha256": "37CB40A7A7A7425649CD14B538D0B1CC2AAE904FD2B521BCE326B528C6BDD1C6"
+    },
+    {
+      "Path": "scripts/Publish-Phase2Candidate.ps1",
+      "Sha256": "B1E9945A0EE223D5479156912C6EABB509CD88D67965AFB84EC84D8887B03B5E"
+    },
+    {
+      "Path": "scripts/publish-win-x64.ps1",
+      "Sha256": "A9D2E43C830EB84CB2473C18F0759EB75A8AB2E8D37001D8B59930C5056FC17D"
+    },
+    {
+      "Path": "scripts/Read-BluetoothSnapshot.ps1",
+      "Sha256": "BFA6E3473F554FAE5D4D20FC48BCDDD1C6CC3A3920D891698DBF9C810C174EAF"
+    },
+    {
+      "Path": "scripts/Read-ProcessMemory.ps1",
+      "Sha256": "017FA893F02F8E58C88ED58BB63AA712D06F20683E58EE9CC5172CBF916783DF"
+    },
+    {
+      "Path": "scripts/ReleaseTools.ps1",
+      "Sha256": "14E7958A69EAF9C860E1EB74985FC660B310DF3298709CF397FA8CEA10C5820B"
+    },
+    {
+      "Path": "scripts/Resolve-Dotnet.ps1",
+      "Sha256": "62FC25309D31BCD681889D26361FEB0B15F18AC08AB345316FD9EC7BF2732048"
+    },
+    {
+      "Path": "scripts/ResourceTools.ps1",
+      "Sha256": "35411E6B4EFCD8811F22629179FDB4E579371AA42B1B55190EAA1ED1087A3A56"
+    },
+    {
+      "Path": "scripts/Review-AtkReport.ps1",
+      "Sha256": "659F09607F3861D03B33B7AB43ECDAEB0674048C1DAC2F96CB91438B0EDED6B5"
+    },
+    {
+      "Path": "scripts/Summarize-HaloBaseline.ps1",
+      "Sha256": "2D10555CC8937BB0BEFEF6C941EB3DDC9D9782AB3FE1B3E6D5941DC86CB4338E"
+    },
+    {
+      "Path": "scripts/Test-Core.ps1",
+      "Sha256": "ECAD1BFCD05531C4976AA7295B84F85E4E8FB96B032B1B19E0087629A69EF10E"
+    },
+    {
+      "Path": "scripts/Test-Phase1.ps1",
+      "Sha256": "1F1BC61DB7122569D54114B64C1EA79A1F3351DAA970BDDAA0EA35E8C7341ACD"
+    },
+    {
+      "Path": "scripts/Test-Phase2Candidate.ps1",
+      "Sha256": "93CEB548ED9FBA6A6F813D57A599A895FBAF5C5D24A72F82F4224E0DF8EF6CFD"
+    },
+    {
+      "Path": "scripts/Test-ReleaseTools.ps1",
+      "Sha256": "9E2857F21F3AA191ED08ED26769491CE4F31C2A9AE17C574F8EA1F85861242F1"
+    },
+    {
+      "Path": "scripts/Test-SoftwareSoak.ps1",
+      "Sha256": "B3A036C8609EC9877ADE3D3BDCD11F5186A8A4E7C77610E9FB1F2EFAC28FE7C1"
+    },
+    {
+      "Path": "scripts/Test-Windows.ps1",
+      "Sha256": "6E62497B8B303B177956494CE93BE51DAC109119A8E68C5CEE6D1640AD1C8B14"
+    },
+    {
+      "Path": "scripts/Verify-Phase2Candidate.ps1",
+      "Sha256": "CD31265DD11C5998D9DA023A5F2DD2C2DC5B8B5D95F478A4025756DE01FE85D2"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/AtkHostCheck.cs",
+      "Sha256": "816076327BEEBAFD41A894C885473384D740796208940D4D9B6BAFD9505FD25B"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/AtkRefreshController.cs",
+      "Sha256": "CA613CF15EA25CFE3589BA185024B3181C27697966E0AAB6F7FEB22176547BE1"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/AtkTraySession.cs",
+      "Sha256": "320DBFECC6AC829BADCEF9821CE8D4DF127501D07B90471A98258D84442357E6"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/DeviceListForm.cs",
+      "Sha256": "1CC2F9F93E121F74840B0BE59084E6B1FF3F217F37D623C28D83AE5768C3BB4B"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/DevicePresentation.cs",
+      "Sha256": "E675752B4226B38B05B4F67CD4139A86FD0FCAC26CBE60FC8163C700B020D118"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/DeviceSettingsPanel.cs",
+      "Sha256": "A18D3A800358C660CF60A1ED9B845DB45ACDF400CAF157F33F4FD49486499182"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/DeviceTrayIcons.cs",
+      "Sha256": "D0E99C8E56D2573350C3323BC1F0D5C655847EC38AC6A7B6737F18AE6B05496A"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/GattHostCheck.cs",
+      "Sha256": "1FBC1C996A590B42206C13BB06E7F00A3DB4D80F36504C3329FE137A3C5E80FE"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/LowBatteryNotifications.cs",
+      "Sha256": "83FBB96F17C4CBE2A279BA12779E1B88D619640972157D5BF971D1206D962C57"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/ManualGattSession.cs",
+      "Sha256": "6DFC50D5669CD9F8EB5E6A95A0A322F54F6DE0A1EDB196E24F7528C9841CBCEE"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/MeasurementSession.cs",
+      "Sha256": "B56EEE4028247AF78A0CFA061D931FF2F815C9F126F710ACA2D66AD862242D27"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/NativeMetadataEvidence.cs",
+      "Sha256": "97E7F9FE91E20D3A235F47585CCD43148493016C008248A86778F804741D4574"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/PeripheralBatteryTray.App.csproj",
+      "Sha256": "391EB5FE7F6D839365CA5AE7C9BB2530E55B1F54E2227FEDFCF20C7854452575"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/Phase1SelfTest.cs",
+      "Sha256": "6EFAC70EAA0536F67B45BA07249952E851F5F699D00316B52E636109CCBF566B"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/Program.cs",
+      "Sha256": "B16FC3E820A41AC4AAF95A375750C5CEC031511F1A5E13DB800F56138A214572"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/SettingsForm.cs",
+      "Sha256": "BA1F85C4DB820648DA4E8DE868F4F5F54E3B32083DC7A7051D669358FF9DF688"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/ShellEventWindow.cs",
+      "Sha256": "2B217B3F518F89438E7DEDBE47DB95BBE9A1F85002097510736EBC71F9C94B96"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/SingleInstance.cs",
+      "Sha256": "B0061C27437C8E6DF5CFEAA35E8DD1F08D763E2E9BEFC60BAE4935AC7D237308"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/StartupOptions.cs",
+      "Sha256": "4F912A6AE97BCC71548DAAD86E7E235885F9F2501BFC7B300B08BE7F59DA1BE5"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/StartupRegistration.cs",
+      "Sha256": "477B76DDE4F7732D4E8C56993C400ACB97AB414E47A6D948843A7A7A0705C0D2"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/TrayApplicationContext.cs",
+      "Sha256": "12309CD005EC8592BE61E3F945D64C2472CCBB461B46468C6A161E96F3384D06"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/TrayIconRenderer.cs",
+      "Sha256": "AFFC7F18F6938836D6707ECD3470BDDD871F75B4DECBA89CE4F858DAACE54618"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.App/WindowsHostCheck.cs",
+      "Sha256": "5AAAE3FE0AFA7B0F233D90117AEC8A709A8A2F315C7BFEB7EDF8552F327D1CC6"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Core/BatteryCoordinator.cs",
+      "Sha256": "8C2828FF60AFB5C61F95EED3B47BF8780E4563F68110818C2A1EE05630ED5C34"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Core/BatteryReading.cs",
+      "Sha256": "E2164084AC0ECD4A4B6B8C73CAC2C851ABFA170B2824008414D47C8E895B1C8F"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Core/BatteryRules.cs",
+      "Sha256": "3F0E92BADB255AC17C658481C1646F3965A8D8FC49669CF6F0897AF5EFE7BC2E"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Core/DeviceBatteryState.cs",
+      "Sha256": "224D16AF215DD1378E6DB82941E552AC7C45D9DC8238E481DBC8B98A8AE7889A"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Core/DiagnosticExportSession.cs",
+      "Sha256": "DDE37F61A5BD06A20986C7C465C31849F87FCE07E9A71BBE205EC422AE1D21DF"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Core/Diagnostics.cs",
+      "Sha256": "EB6F01249BB19501B244DD2D3DD17E437575E9A576805BB2E547959F331D953B"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Core/DisplaySettings.cs",
+      "Sha256": "182C10C9B764B0BCB05A159F01059151B43F530C92FA58B8F4EF1DF65208AF9E"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Core/IBatteryProvider.cs",
+      "Sha256": "BB2853B0CC06D0CF2F5D1134A02D18ED8F88DF8156A0D8B097B4601007084606"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Core/LowBatteryMonitor.cs",
+      "Sha256": "A724076872941536C64216B5BF8ACFCE5922669E828AE6AC96B08A5DC20CE9D6"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Core/PeripheralBatteryTray.Core.csproj",
+      "Sha256": "E2C08643E21EBA9123E4B319840FEC508EFC44B473A7CAB491D6188E5F6905CA"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Core/ReadOperation.cs",
+      "Sha256": "8810D715ED0629F586A7BA0A2B7C21FDEB6EB2EB5EDB7AB7EE663BC706D11A71"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Core/RefreshPolicy.cs",
+      "Sha256": "3D7B2D9A4EDF520C2D4996006A2F4A05133CD667E05FF8B6D8AEA44E2B79710E"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Core/SnapshotMailbox.cs",
+      "Sha256": "9D5E474C41F223177841F748DEA8225858FD92B71B322F3E285A1686DBE91378"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/AtkBatterySession.cs",
+      "Sha256": "BCEA75AC1263A4473BB46B68D47E2AB8077D0262BC9A902A52EF6296CB073254"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/AtkHidContracts.cs",
+      "Sha256": "D2DE6B836FC3C63C2F83B13A8861244C6F1BBAE4FBBDDBF99D47753BCDB0FE36"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/AtkManualSession.cs",
+      "Sha256": "E198FE3CEA82B6136343240734EC8F34A9E1EE048A25E8A53EA391464B19AAF4"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/AtkProtocol.cs",
+      "Sha256": "AD1167664E80461A73424AB9EC46D8DBEC847BFB0AF3CB736E2E1B36497050F5"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/BleGattProvider.cs",
+      "Sha256": "D65B02B16471CF3DA0D1972E26C9D7260928F29DE9347F0AF797A43D75AC482F"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/BluetoothDiscovery.cs",
+      "Sha256": "B2E82DEC6A38B71393EAF5A74BAE736485C6F24CD91A34B8D952AF3127717469"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/DeviceIdentityResolver.cs",
+      "Sha256": "D4CCA4ACE942499B997012BF2180C4270C8A05E0306714EDBA6C94F35AA590CA"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/GattClient.cs",
+      "Sha256": "368E3C7E26491766C04FE5B117CC4DFDEA46BB3842EE8323D9360A2B11D5C0F8"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/NativeMethods.cs",
+      "Sha256": "5A44144BDE3B2C09EE42C3AFE2B8F0D59B04BC15BAADF03F3E886BD303CB9831"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/ObservedGattClient.cs",
+      "Sha256": "B39DE13ECD60B7778C3402A78E963804645BFCDF99CEB96BF0AACD6F290A3150"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/ObservedPnpNative.cs",
+      "Sha256": "7392BEBA38F711216596CD56E34719AEA8BFB0B829762B98296F6361C9161250"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/PeripheralBatteryTray.Windows.csproj",
+      "Sha256": "CA041BE7CB4F2F603A2735EDB4F02D4AC58675E6FD630A2D61014956D504D88B"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/PnpIndexService.cs",
+      "Sha256": "F30F860F41362C7589E41C486697D9C43B1F377998E6F4FBB35E37E3BCD65D0D"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/PnpPropertyReader.cs",
+      "Sha256": "C935FF1CCEAAE1AE4864387D61E9DF1AD4E0EFF1E21C94BFBEFA48E4A42A086C"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/PollingSettingsStore.cs",
+      "Sha256": "9230D379E58CB09EA89F96BB63798A5F400CB1D34E49B89C3C13A1C2233B5982"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/Win32AtkHidTransport.cs",
+      "Sha256": "7E62FEC2FD818F20DB897DE87F6208016616A3816C7134B98CF47301F15A2561"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/WindowsBatteryProvider.cs",
+      "Sha256": "26F4862BF3F4DA861318497770B1223289A43B1B5D741F7CA3FE07A82DB058FE"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/WindowsBatteryRuntime.cs",
+      "Sha256": "5B141EE8AB3DBFE65BAD6A042DA4635791A4E9E0CE5B338CEE71A5C757C58952"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/WinRtEndpointWatcher.cs",
+      "Sha256": "9E92CD6D92C77EB2C6C437BBF372F25DA0145C9E20E1BAFC7BE45A57C17A8592"
+    },
+    {
+      "Path": "src/PeripheralBatteryTray.Windows/WinRtGattClient.cs",
+      "Sha256": "CDE076C7782CF4AC8806CDF03F2B8895DFC46C537C5541DA18014A7647318E1E"
+    },
+    {
+      "Path": "tests/PeripheralBatteryTray.App.Tests/AtkAutoCases.cs",
+      "Sha256": "F3077700B1B8ED8DBF0CEE879E5890B4390452CD8C4D1F21F965FE0FEACEAB7D"
+    },
+    {
+      "Path": "tests/PeripheralBatteryTray.App.Tests/DeviceDisplayCases.cs",
+      "Sha256": "5EDE8452D14284E40EE0728E62FFFE883792D74A4A6417495D3778CF2FDE4E60"
+    },
+    {
+      "Path": "tests/PeripheralBatteryTray.App.Tests/LowBatteryCases.cs",
+      "Sha256": "FE191DBE535EF192EF546565151E868D8EC042B580F6452B63B9724B9565D80F"
+    },
+    {
+      "Path": "tests/PeripheralBatteryTray.App.Tests/PeripheralBatteryTray.App.Tests.csproj",
+      "Sha256": "B0E116A14AE8CEB711ADB8A6DAAF8F17CC54A48A92D8161D286512F0B5B2C40D"
+    },
+    {
+      "Path": "tests/PeripheralBatteryTray.App.Tests/Program.cs",
+      "Sha256": "E68468D36B6908D80041FD29C6C4AAB732514526C2A1F3AFB4452B16075FEB61"
+    },
+    {
+      "Path": "tests/PeripheralBatteryTray.App.Tests/SoftwareSoak.cs",
+      "Sha256": "47855982C6084501AB9D57E5A68523C9CE5EDD07E87C2A745464D5CF38ADCD0D"
+    },
+    {
+      "Path": "tests/PeripheralBatteryTray.Tests/CoordinatorCases.cs",
+      "Sha256": "8F319FB141C597B52A62C94BC8296CFED1C306405A2F03F8E7AD4ADA98D27D37"
+    },
+    {
+      "Path": "tests/PeripheralBatteryTray.Tests/LowBatteryCases.cs",
+      "Sha256": "6ADFFE790F11BEE353AAA4E7A850F74F57C2D52CDEE2194416CD432B121B34C1"
+    },
+    {
+      "Path": "tests/PeripheralBatteryTray.Tests/PeripheralBatteryTray.Tests.csproj",
+      "Sha256": "7AEC8FEB32A9F22B6447637F56C0F1548C96B853FABAB8BC91EFA6B7AAE4AE76"
+    },
+    {
+      "Path": "tests/PeripheralBatteryTray.Tests/Program.cs",
+      "Sha256": "63BDF01E2B5C7B0D5F9BACADE4A557BDEC7705C415262B10E12166012A0B5E51"
+    },
+    {
+      "Path": "tests/PeripheralBatteryTray.Windows.Tests/AtkCases.cs",
+      "Sha256": "F7AE7B5E260C7D9258EA9D693BCCFFAC6B731DB8903DB1112BDF75D08F530CE5"
+    },
+    {
+      "Path": "tests/PeripheralBatteryTray.Windows.Tests/GattCases.cs",
+      "Sha256": "4F356584EEAAE67A15D94B3959CFEADB725C4A6738D1FEE8D8F3D1784C85966E"
+    },
+    {
+      "Path": "tests/PeripheralBatteryTray.Windows.Tests/PeripheralBatteryTray.Windows.Tests.csproj",
+      "Sha256": "FE827D9A60390E9620EDF19175BB2341CDFB2F6982E9B6600EEED3A4184B69A6"
+    },
+    {
+      "Path": "tests/PeripheralBatteryTray.Windows.Tests/PlatformIntegrationCases.cs",
+      "Sha256": "E5AB59618F5CFF33D47592AF4004C93DD20342FB842416FD98EBE54F146DFED6"
+    },
+    {
+      "Path": "tests/PeripheralBatteryTray.Windows.Tests/Program.cs",
+      "Sha256": "8A774EB00CB505FDBF49F813E67490738497CC3A4AB7B4B4A145D3AA048EA8BB"
+    },
+    {
+      "Path": "THIRD_PARTY_NOTICES.md",
+      "Sha256": "656F6C60DB0BDA98BA0F80E0FB5591AD1E6DA2F44582DBEF6AB9C97886FFBEB7"
+    }
+  ],
+  "Files": [
+    {
+      "Path": "app/Microsoft.Windows.SDK.NET.dll",
+      "Length": 24877600,
+      "Sha256": "0EC371D93798852E36461C8ADDDBEADCE0F963A04752F0B64E54FE19C1C834A7"
+    },
+    {
+      "Path": "app/PeripheralBatteryTray.Core.dll",
+      "Length": 154624,
+      "Sha256": "F4CED77F50948C3287E1B2570FFCA1ECA08D7A27B8D193DE6895B1658D0348AE"
+    },
+    {
+      "Path": "app/PeripheralBatteryTray.deps.json",
+      "Length": 2081,
+      "Sha256": "46C29C08F8FB460F60EDBEDB5F7DAC8B92FE82C66CC248C71075573645708ECF"
+    },
+    {
+      "Path": "app/PeripheralBatteryTray.dll",
+      "Length": 178176,
+      "Sha256": "B1AF2466F817894F53DDFB057D66451165DEEC5D914DE066B2296F94FA37BF36"
+    },
+    {
+      "Path": "app/PeripheralBatteryTray.exe",
+      "Length": 162304,
+      "Sha256": "B9AC2479458CD9A78DA814BB46982FC86211D173BCCA3102EB8D91A38C0E3433"
+    },
+    {
+      "Path": "app/PeripheralBatteryTray.runtimeconfig.json",
+      "Length": 519,
+      "Sha256": "96BC2946DFF8790400D652EC7F8DE7BB043E954980D59470C112788B68A1FBD3"
+    },
+    {
+      "Path": "app/PeripheralBatteryTray.Windows.dll",
+      "Length": 168960,
+      "Sha256": "8D2762A12A7A2A19AB7599D7EE0E0C995B41314228AD73E3449BB0D4B06C4605"
+    },
+    {
+      "Path": "app/WinRT.Runtime.dll",
+      "Length": 528944,
+      "Sha256": "BCF3A14E8712A90837FC5C0D8C8A24696AF2BD7F74E9767597EC81EDEDFB23DB"
+    },
+    {
+      "Path": "Check-ATK.cmd",
+      "Length": 261,
+      "Sha256": "DD657B193DBEE3B9642A25B54DA0E662ADF7B03AB85F405F22C93261DFF7653D"
+    },
+    {
+      "Path": "Check-Bluetooth.cmd",
+      "Length": 263,
+      "Sha256": "D3FA93F031B576A3432D1C84D48BF06F3C7978D5B637A4DE06C3B80451584FD0"
+    },
+    {
+      "Path": "docs/ATK_PROTOCOL_RESEARCH.md",
+      "Length": 6639,
+      "Sha256": "9C9B8562F6EEA72397C80F70887EB3A47D53DC664C2EBC79EB46CCC6F5CDC32C"
+    },
+    {
+      "Path": "docs/DEVICE_COMPATIBILITY.md",
+      "Length": 2286,
+      "Sha256": "ADDD0635C22496E4A8028CB27DBAE6E78EA0AEE7BD656D41462457B66C731EBC"
+    },
+    {
+      "Path": "docs/PHASE2_VALIDATION.md",
+      "Length": 7067,
+      "Sha256": "F3C0E58C70C846CD90BFE9B4DF016D8D2D0AE917E79F918D3474DB3988AED51D"
+    },
+    {
+      "Path": "docs/PHASE4_DEVICE_SETTINGS.md",
+      "Length": 8353,
+      "Sha256": "D65B33730B0067C83DE9A211C560553307461BE56CB37211F7921695005B6E39"
+    },
+    {
+      "Path": "docs/RESOURCE_BENCHMARK.md",
+      "Length": 4630,
+      "Sha256": "80AD1E58A84198E36B2978DEA03E23945F5E21A71A308F1F1753B9D019D3F901"
+    },
+    {
+      "Path": "docs/TROUBLESHOOTING.md",
+      "Length": 4847,
+      "Sha256": "5CFE5EB25AFCB874C9E1187387916CB7A8FABDF14D6686E8FAEDACF244899143"
+    },
+    {
+      "Path": "docs/VALIDATION.json",
+      "Length": 6134,
+      "Sha256": "F76B14FEBB1AC0962A8267E97A444996F08D663390DEE5571128D8A0AA0B4377"
+    },
+    {
+      "Path": "licenses/CsWinRT-LICENSE.txt",
+      "Length": 1162,
+      "Sha256": "9906940F61B1F0B533FA7D99BAF55178B2808FBE113EA51DFBFAD8572CCD5F2B"
+    },
+    {
+      "Path": "licenses/Windows-SDK-license.rtf",
+      "Length": 246945,
+      "Sha256": "DD07EB178E00C6BBA4148457FC00FF77CD4887EB521D504186FE59C9EC8BBE62"
+    },
+    {
+      "Path": "README_中文.md",
+      "Length": 10506,
+      "Sha256": "FDCBAC5CC802AF84983AB8EF6D663F6B0410E13A3CFA7604B7E214104CF09302"
+    },
+    {
+      "Path": "Start.cmd",
+      "Length": 207,
+      "Sha256": "EA63BE0D49A43DBB3C7C4715CE0633DB18E3F640F4182BA9C860530F1CE357F2"
+    },
+    {
+      "Path": "THIRD_PARTY_NOTICES.md",
+      "Length": 6778,
+      "Sha256": "656F6C60DB0BDA98BA0F80E0FB5591AD1E6DA2F44582DBEF6AB9C97886FFBEB7"
+    }
+  ]
+}

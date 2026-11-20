@@ -10,7 +10,7 @@ foreach ($suite in @('Core','Windows','App')) {
     $project = switch ($suite) { Core { 'PeripheralBatteryTray.Tests' } Windows { 'PeripheralBatteryTray.Windows.Tests' } App { 'PeripheralBatteryTray.App.Tests' } }
     $out = Join-Path $VerificationDirectory ('test-binaries/' + $suite)
     if (Test-Path -LiteralPath $out) { throw 'Test output already exists; refusing stale evidence.' }
-    & $dotnet publish (Join-Path $root ('tests/' + $project)) -c Release -r win-x64 --self-contained false "-p:BuildId=$BuildId" -o $out --nologo | Out-Host
+    & $dotnet publish (Join-Path $root ('tests/' + $project)) -c Release -r win-x64 --self-contained false "-p:BuildId=$BuildId" -o $out --nologo -m:1 -nr:false | Out-Host
     if ($LASTEXITCODE) { throw 'Test build failed.' }
     $reportPath = Join-Path $VerificationDirectory ($suite.ToLowerInvariant() + '-tests.local.json')
     & $dotnet (Join-Path $out ($project + '.dll')) --report $reportPath | Out-Host

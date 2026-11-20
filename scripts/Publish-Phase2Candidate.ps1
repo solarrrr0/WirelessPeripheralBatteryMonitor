@@ -16,7 +16,7 @@ if (Test-Path -LiteralPath $verification) { throw 'Verification directory alread
 $beforeInputs = @(Get-ReleaseInputFiles $root)
 [void][IO.Directory]::CreateDirectory($verification)
 $publish = Join-Path $verification 'publish'
-& $dotnet publish (Join-Path $root 'src/PeripheralBatteryTray.App') -c Release -r win-x64 --self-contained false "-p:BuildId=$buildId" -o $publish --nologo | Out-Host
+& $dotnet publish (Join-Path $root 'src/PeripheralBatteryTray.App') -c Release -r win-x64 --self-contained false "-p:BuildId=$buildId" -o $publish --nologo -m:1 -nr:false | Out-Host
 if ($LASTEXITCODE) { throw 'Publish failed; partial output retained locally, no candidate created.' }
 $runtime = @(Get-ReleaseAllowlist | Where-Object { $_.StartsWith('app/') } | ForEach-Object { $_.Substring(4) })
 $publishFiles = @(Get-ReleaseFiles $publish)

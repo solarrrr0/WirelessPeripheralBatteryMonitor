@@ -7,7 +7,7 @@
     <ApplicationDefaultFont>Microsoft YaHei UI, 9pt</ApplicationDefaultFont>
     <AssemblyName>PeripheralBatteryTray</AssemblyName>
     <Product>外设电量 · Phase 5 软件候选版</Product>
-    <Version>0.5.2</Version>
+    <Version>0.6.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="PeripheralBatteryTray.App.Tests" />

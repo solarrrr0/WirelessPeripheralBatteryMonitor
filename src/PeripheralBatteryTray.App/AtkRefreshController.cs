@@ -15,6 +15,7 @@ internal class AtkRefreshController
     private ITimer? _timer;
     private int _timerVersion, _epoch, _failures;
     private bool _enabled, _closed, _suspended, _reading, _valid, _automatic, _attemptAutomatic;
+    private bool _offline;
     private int _minutes = 5;
     private long? _due, _retryFloor, _lastStart;
     private long _captured;
@@ -53,7 +54,8 @@ internal class AtkRefreshController
             bool busy = _reading || _session.State.Busy;
             return new(fresh ? _lastPercent : null, _lastPercent, _observed,
                 _valid && !fresh ? "上次读数已过期。" : _status, busy,
-                !_closed && !_suspended && !busy && !_session.State.Blocked, _automatic, AutomaticStatus, _acceptedSequence);
+                !_closed && !_suspended && !busy && !_session.State.Blocked, _automatic, AutomaticStatus, _acceptedSequence,
+                !fresh && !busy && !_suspended && _offline);
         }
     }
     internal void AttachDispatcher(Action<Action> post)
@@ -84,7 +86,7 @@ internal class AtkRefreshController
         if (!Reading.CanRead || (automatic && !_enabled)) return false;
         if (_lastStart is long last && _time.GetElapsedTime(last) < TimeSpan.FromSeconds(10))
         { _status = "请等待10秒查询间隔结束后再读。"; Notify(); return false; }
-        _reading = true; _valid = false; _attemptAutomatic = automatic; _lastStart = Now; _due = null;
+        _reading = true; _valid = false; _offline = false; _attemptAutomatic = automatic; _lastStart = Now; _due = null;
         _status = "正在检查接收器并读取电量…";
         if (!_session.TryStart()) { _reading = false; Notify(); return false; }
         ActiveTask = ObserveAsync(_epoch);
@@ -97,6 +99,7 @@ internal class AtkRefreshController
         if (_closed) return;
         if (epoch == _epoch && !_suspended)
         {
+            _offline = result.Outcome is AtkBatchOutcome.Offline or AtkBatchOutcome.NoInterface;
             if (result.Outcome == AtkBatchOutcome.Success && !_session.State.Blocked)
             {
                 _lastPercent = result.Percent; _captured = result.CapturedTimestamp; _observed = result.ObservedAtUtc;
@@ -161,7 +164,7 @@ internal class AtkRefreshController
     internal void Suspend()
     {
         if (_closed || _suspended) return;
-        _suspended = true; _epoch++; _valid = false; _session.Cancel();
+        _suspended = true; _epoch++; _valid = false; _offline = false; _session.Cancel();
         _status = "系统已暂停，旧读数仅供参考。"; Notify();
     }
     internal void Resume()

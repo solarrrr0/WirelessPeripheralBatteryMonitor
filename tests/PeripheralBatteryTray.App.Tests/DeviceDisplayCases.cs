@@ -189,8 +189,11 @@ internal static class DeviceDisplayCases
                 var grid = form.DeviceSettings.Grid; grid.CurrentCell = grid.Rows[0].Cells[1]; check(grid.BeginEdit(true));
                 ((TextBox)grid.EditingControl!).Text = "My headset";
                 form.DeviceSettings.IconChoice.SelectedIndex = 1; form.DeviceSettings.SortChoice.SelectedIndex = 1;
+                form.DeviceSettings.StyleChoice.SelectedIndex = 1;
                 form.ApplyButton.PerformClick();
                 check(store.Current.Display.For(device.Binding.PreferenceKey).Alias == "My headset" && context.DeviceIconCount == 2 && transport.Scans == 0);
+                check(store.Current.Display.IconStyle == TrayIconStyle.Number && context.DisplayedTrayNumber == "11"
+                    && made.All(i => i.LastStyle == TrayIconStyle.Number));
                 grid.Rows[0].Cells[2].Value = true; form.ApplyButton.PerformClick();
                 check(context.DisplayedMinimumPercent is null && context.DeviceIconCount == 1 && made.Count(i => i.Disposed) == 1);
                 check(All(form).Where(c => c.Visible).All(c => form.RectangleToScreen(form.ClientRectangle).Contains(c.RectangleToScreen(c.ClientRectangle))));
@@ -234,6 +237,107 @@ internal static class DeviceDisplayCases
             var longPath = new StartupRegistration(@"C:\" + string.Concat(Enumerable.Repeat("long-folder\\", 30)) + "app.exe", registry);
             check(!longPath.Read().CanChange && registry.Writes == before);
         });
+        run("DP07", "Optional schema4 icon style round-trips without changing existing permissions or accepting invalid values", () =>
+        {
+            var files = new Files(); string path = Path.GetFullPath("number-style.test.json");
+            files.Data[path] = """{"schemaVersion":4,"pollIntervalMinutes":7,"atk":{"autoRefreshEnabled":true,"pollIntervalMinutes":10},"notifications":{"lowBatteryEnabled":true,"thresholdPercent":13},"display":{"sort":"Name","iconMode":"PerDevice","devices":{},"future":17}}""";
+            var store = new PollingSettingsStore(path, files);
+            check(store.Current.CanSave && store.Current.Display.IconStyle == TrayIconStyle.Battery);
+            var number = new DisplaySettings(DeviceSort.Name, TrayIconMode.PerDevice, iconStyle: TrayIconStyle.Number);
+            check(store.TrySave(7, true, 10, true, 13, number));
+            var reloaded = new PollingSettingsStore(path, files).Current;
+            check(reloaded.Display.IconStyle == TrayIconStyle.Number && reloaded.Display.Sort == DeviceSort.Name
+                && reloaded.Display.IconMode == TrayIconMode.PerDevice && reloaded.AtkAutoEnabled && reloaded.AtkMinutes == 10
+                && reloaded.LowBatteryEnabled && reloaded.LowBatteryThreshold == 13 && reloaded.Minutes == 7);
+            using(var json = JsonDocument.Parse(files.Data[path]))
+                check(json.RootElement.GetProperty("schemaVersion").GetInt32() == 4
+                    && json.RootElement.GetProperty("display").GetProperty("future").GetInt32() == 17);
+            string saved = files.Data[path]; files.Fail = true;
+            check(!store.TrySave(7, true, 10, true, 13, DisplaySettings.Default)
+                && files.Data[path] == saved && store.Current.Display.IconStyle == TrayIconStyle.Number);
+            files.Fail = false;
+            foreach(string invalid in new[] { "null", "1", "\"1\"", "\"number\"", "\"Other\"" })
+            {
+                files.Data[path] = saved.Replace("\"iconStyle\":\"Number\"", "\"iconStyle\":"+invalid);
+                var rejected = new PollingSettingsStore(path, files);
+                check(!rejected.Current.CanSave && !rejected.TrySave(5) && files.Data[path] != saved);
+            }
+            string diskPath = Path.Combine(AppContext.BaseDirectory, "number-style-"+Guid.NewGuid().ToString("N"), "config.local.json");
+            var disk = new PollingSettingsStore(diskPath);
+            check(disk.TrySave(5, false, 5, false, 20, number)
+                && new PollingSettingsStore(diskPath).Current.Display.IconStyle == TrayIconStyle.Number);
+            check(disk.TrySave(5, false, 5, false, 20, DisplaySettings.Default)
+                && new PollingSettingsStore(diskPath).Current.Display.IconStyle == TrayIconStyle.Battery);
+        });
+        run("DP08", "Numeric icon glyphs preserve zero, 100, offline and unknown at each tray size; native handles are released", () =>
+        {
+            string[] values = ["0", "9", "20", "93", "100", "—", "?"];
+            TrayVisual[] visuals = [new(0,false,false),new(9,false,false),new(20,false,false),new(93,false,false),new(100,false,false),new(null,true,false),new(null,false,true)];
+            int[] sizes = [16,20,24,32];
+            int gdi = GuiResources(0), user = GuiResources(1);
+            using var preview = new Bitmap(540, 2*4*70);
+            using var g = Graphics.FromImage(preview);
+            using var font = new Font("Segoe UI", 8);
+            for(int theme=0;theme<2;theme++) for(int s=0;s<sizes.Length;s++)
+            {
+                int y=(theme*4+s)*70;
+                g.FillRectangle(theme==0?Brushes.Black:Brushes.White,0,y,preview.Width,70);
+                g.DrawString(sizes[s]+"px",font,theme==0?Brushes.White:Brushes.Black,2,y+2);
+                for(int i=0;i<visuals.Length;i++)
+                {
+                    check(TrayIconRenderer.NumberText(visuals[i])==values[i]);
+                    using var icon=TrayIconRenderer.Create(visuals[i],sizes[s],TrayIconStyle.Number,TrayIconRenderer.MouseNumberColor);
+                    using var image=icon.ToBitmap();
+                    check(image.Width==sizes[s] && image.Height==sizes[s]);
+                    int colored=0; for(int x=0;x<image.Width;x++) for(int yy=0;yy<image.Height;yy++) if(image.GetPixel(x,yy).A>0) colored++;
+                    if(colored<=5 || colored>=image.Width*image.Height
+                        || image.GetPixel(0,0).A!=0 || image.GetPixel(image.Width-1,image.Height-1).A!=0)
+                        throw new InvalidOperationException($"Invalid numeric icon {values[i]} at {sizes[s]}px: colored={colored}, corners={image.GetPixel(0,0).A}/{image.GetPixel(image.Width-1,image.Height-1).A}");
+                    check(true);
+                    g.DrawImage(image,44+i*70,y+2);
+                    g.InterpolationMode=System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    g.DrawImage(image,new Rectangle(44+i*70,y+29,32,32));
+                }
+            }
+            preview.Save(Path.Combine(AppContext.BaseDirectory,"numeric-tray-preview.local.png"));
+            check(TrayIconRenderer.NumberText(new(-1,false,false))=="?"
+                && TrayIconRenderer.NumberText(new(101,false,false))=="?");
+            for(int i=0;i<500;i++) using(TrayIconRenderer.Create(new(i%101,false,false),16+i%4*8,TrayIconStyle.Number)) { }
+            check(GuiResources(0)-gdi<12 && GuiResources(1)-user<8);
+        });
+        run("DP09", "Displayed system numbers stay out of current aggregation, sorting and alerts; style and cache updates repaint only when needed", () =>
+        {
+            var time=TimeProvider.System; var period=TimeSpan.FromMinutes(5);
+            var device=Device("numeric-cache","Headset",null); var stamp=device.Binding.Stamp(ReadingSource.WindowsProperty,1);
+            SourceState Report(int p,string key) => new() { Source=ReadingSource.WindowsProperty,CandidateKey=key,
+                LatestRequestStamp=stamp,LatestOutcome=ReadOutcome.Success,
+                LastSuccess=new(BatteryValue.FromPercent(p),ReadingSource.WindowsProperty,stamp,time.GetUtcNow(),time.GetTimestamp()) };
+            device=device.WithSystemCandidates([Report(100,"one"),Report(90,"two")]);
+            var snapshot=new BatterySnapshot(1,time.GetUtcNow(),BatteryMode.Real,[device],time,period);
+            var entry=DevicePresentation.Project(snapshot,period,null,DisplaySettings.Default).Single();
+            check(entry.IconPercent==90 && entry.Percent is null && entry.IconUsesSystemReport);
+            check(DevicePresentation.NumberAggregate([entry]).MinimumPercent==90
+                && DevicePresentation.Aggregate([entry],BatteryMode.Real).MinimumPercent is null
+                && !LowBatteryProjection.Samples(snapshot,time,period,null,DisplaySettings.Default).Any());
+            using var menu=new ContextMenuStrip(); using var shell=new ShellDeviceTrayIcon(menu,()=>{});
+            shell.Update(entry,16,TrayIconStyle.Number);
+            check(shell.CurrentNumber=="90" && shell.CurrentTooltip!.Contains("系统参考"));
+            for(int i=0;i<100;i++) shell.Update(entry with { Name="Alias" },16,TrayIconStyle.Number);
+            check(shell.RenderCount==1 && shell.CurrentTooltip!.Contains("Alias"));
+            shell.Update(entry with { DisplayPercent=80 },16,TrayIconStyle.Number);
+            check(shell.CurrentNumber=="80" && shell.RenderCount==2);
+            shell.Update(entry with { DisplayPercent=80 },16,TrayIconStyle.Battery);
+            check(shell.CurrentNumber is null && shell.RenderCount==3);
+            var offline=device with { Binding=device.Binding with { Ble=new(ConnectionState.Disconnected,2) } };
+            var off=DevicePresentation.Project(new(2,time.GetUtcNow(),BatteryMode.Real,[offline],time,period),period,null,DisplaySettings.Default).Single();
+            shell.Update(off,16,TrayIconStyle.Number);check(shell.CurrentNumber=="—" && shell.CurrentTooltip!.Contains("离线"));
+            var stale=DevicePresentation.Project(new(3,time.GetUtcNow(),BatteryMode.Real,[],time,period),period,
+                new(null,100,time.GetUtcNow(),"过期",false,true),DisplaySettings.Default).Single();
+            shell.Update(stale,16,TrayIconStyle.Number);check(shell.CurrentNumber=="?" && shell.CurrentTooltip!.Contains("上次100%"));
+            var disconnected=stale with { Visual=new(null,true,false,BatteryMode.Real) };
+            shell.Update(disconnected,16,TrayIconStyle.Number);check(shell.CurrentNumber=="—");
+            check(DevicePresentation.NumberAggregate([entry with { Hidden=true }]).MinimumPercent is null);
+        });
     }
     private static BatteryDeviceState Device(string id, string name, int? percent)
     {
@@ -248,10 +352,18 @@ internal static class DeviceDisplayCases
     private sealed class Icon : IDeviceTrayIcon
     {
         internal bool Disposed; internal int Recoveries;
-        public void Update(PresentedDevice device, int size) { if (Disposed) throw new ObjectDisposedException("icon"); }
+        internal TrayIconStyle LastStyle;
+        public void Update(PresentedDevice device, int size, TrayIconStyle style = TrayIconStyle.Battery) { if (Disposed) throw new ObjectDisposedException("icon"); LastStyle=style; }
         public void Recover() => Recoveries++;
         public void Dispose() => Disposed = true;
     }
+    private static int GuiResources(uint flag)
+    {
+        using var process=System.Diagnostics.Process.GetCurrentProcess();
+        return GetGuiResources(process.Handle,flag);
+    }
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    private static extern int GetGuiResources(nint process,uint flag);
     private sealed class NoDevice : IAtkHidTransport
     {
         internal int Scans;

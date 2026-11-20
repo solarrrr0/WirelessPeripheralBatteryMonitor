@@ -18,6 +18,8 @@ internal sealed class TrayApplicationContext : ApplicationContext
     private Icon? _ownedIcon;
     private BatteryTrayVisual? _lastVisual;
     private int _lastIconSize;
+    private TrayVisual? _lastIconVisual;
+    private TrayIconStyle? _lastIconStyle;
     private bool _refreshing;
     private bool _exiting;
     private bool _disposed;
@@ -36,6 +38,8 @@ internal sealed class TrayApplicationContext : ApplicationContext
     internal ToolStripMenuItem? AtkMenu { get; }
     internal ToolStripMenuItem? AtkAutomaticMenu { get; }
     internal int? DisplayedMinimumPercent => _lastVisual?.MinimumPercent;
+    internal string? DisplayedTrayNumber => _lastIconStyle == TrayIconStyle.Number && _lastIconVisual is { } visual
+        ? TrayIconRenderer.NumberText(visual) : null;
     internal DeviceListForm Popup { get; }
     internal IReadOnlyList<DeviceBatteryState> Devices { get; private set; } = [];
     internal int IconRenderCount { get; private set; }
@@ -212,18 +216,24 @@ internal sealed class TrayApplicationContext : ApplicationContext
         if (_exiting || _disposed) return;
         var devices = presented ?? PresentedDevices;
         BatteryTrayVisual visual = DevicePresentation.Aggregate(devices, CurrentSnapshot.Mode);
-        string tooltip = visual.Tooltip;
+        TrayVisual iconVisual = _display.IconStyle == TrayIconStyle.Number ? DevicePresentation.NumberAggregate(devices)
+            : new(visual.MinimumPercent, visual.HasOffline, visual.HasUnknown);
+        string tooltip = _display.IconStyle == TrayIconStyle.Number && iconVisual.MinimumPercent is int shown
+            ? (CurrentSnapshot.Mode == BatteryMode.Mock ? "模拟 · " : "") + $"外设电量 · 显示最低 {shown}%"
+                + (devices.Any(d => !d.Hidden && d.IconUsesSystemReport) ? " · 含系统参考" : "") : visual.Tooltip;
         _tray.Text = tooltip.Length <= 63 ? tooltip : tooltip[..63];
         uint dpi = GetDpiForSystem();
         int size = Math.Clamp(GetSystemMetricsForDpi(49, dpi), 16, 64);
-        _deviceIcons.Update(devices, _display.IconMode, size);
-        if (_lastVisual == visual && _lastIconSize == size) return;
-        Icon next = TrayIconRenderer.Create(new TrayVisual(visual.MinimumPercent, visual.HasOffline, visual.HasUnknown), size);
+        _deviceIcons.Update(devices, _display.IconMode, size, _display.IconStyle);
+        _lastVisual = visual;
+        if (_lastIconVisual == iconVisual && _lastIconStyle == _display.IconStyle && _lastIconSize == size) return;
+        Icon next = TrayIconRenderer.Create(iconVisual, size, _display.IconStyle);
         _tray.Icon = next;
         Icon? previous = _ownedIcon;
         _ownedIcon = next;
         previous?.Dispose();
-        _lastVisual = visual;
+        _lastIconVisual = iconVisual;
+        _lastIconStyle = _display.IconStyle;
         _lastIconSize = size;
         IconRenderCount++;
     }

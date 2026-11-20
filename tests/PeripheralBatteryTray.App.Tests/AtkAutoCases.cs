@@ -96,13 +96,18 @@ internal static class AtkAutoCases
             var session = new AtkTraySession(fake, clock); session.AttachDispatcher(queue.Enqueue); session.Configure(true, 5);
             clock.Advance(10); Drain(queue);
             int count = 1;
+            check(session.Reading is { Offline: true, Percent: null });
             foreach (int minutes in new[] { 5, 10, 20, 30, 30 })
             {
                 clock.Advance(minutes * 60 - 1); Drain(queue); check(fake.Scans == count);
                 clock.Advance(1); Drain(queue); check(fake.Scans == ++count && session.State == AtkRefreshState.Backoff);
             }
-            fake.Online = true; clock.Advance(10); check(session.TryRead() && session.Reading.Percent == 95);
+            fake.Online = true; clock.Advance(10); check(session.TryRead() && session.Reading is { Percent: 95, Offline: false });
             clock.Advance(300); Drain(queue); check(fake.Scans == ++count + 1 && session.State == AtkRefreshState.Scheduled);
+            session.StopAsync().GetAwaiter().GetResult();
+            clock = new(); fake = new() { Targets = 0 }; session = new(fake, clock);
+            check(session.TryRead() && session.Reading is { Offline: true, Percent: null });
+            session.Suspend(); session.Resume(); check(!session.Reading.Offline);
             session.StopAsync().GetAwaiter().GetResult();
             clock = new(); queue = new(); fake = new() { DenyOpen = true }; session = new(fake, clock); session.AttachDispatcher(queue.Enqueue); session.Configure(true, 5);
             clock.Advance(10); Drain(queue); check(session.State == AtkRefreshState.Backoff && fake.Commands.Count == 0);

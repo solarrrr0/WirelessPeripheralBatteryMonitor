@@ -7,6 +7,7 @@ namespace PeripheralBatteryTray.Core;
 
 public enum DeviceSort { Discovery, Name, Battery }
 public enum TrayIconMode { Aggregate, PerDevice }
+public enum TrayIconStyle { Battery, Number }
 public sealed record DevicePreference(string Alias = "", bool Hidden = false);
 
 /// <summary>Local presentation preferences contain digests, never native device identities.</summary>
@@ -18,11 +19,12 @@ public sealed class DisplaySettings
     public static DisplaySettings Default { get; } = new();
     public DeviceSort Sort { get; }
     public TrayIconMode IconMode { get; }
+    public TrayIconStyle IconStyle { get; }
     public IReadOnlyDictionary<string, DevicePreference> Devices { get; }
     public DisplaySettings(DeviceSort sort = DeviceSort.Discovery, TrayIconMode iconMode = TrayIconMode.Aggregate,
-        IEnumerable<KeyValuePair<string, DevicePreference>>? devices = null)
+        IEnumerable<KeyValuePair<string, DevicePreference>>? devices = null, TrayIconStyle iconStyle = TrayIconStyle.Battery)
     {
-        if (!Enum.IsDefined(sort) || !Enum.IsDefined(iconMode)) throw new ArgumentException("Invalid display mode.");
+        if (!Enum.IsDefined(sort) || !Enum.IsDefined(iconMode) || !Enum.IsDefined(iconStyle)) throw new ArgumentException("Invalid display mode.");
         var copy = new Dictionary<string, DevicePreference>(StringComparer.Ordinal);
         foreach (var pair in devices ?? [])
         {
@@ -30,7 +32,7 @@ public sealed class DisplaySettings
                 || !ValidAlias(pair.Value.Alias) || !copy.TryAdd(pair.Key, pair.Value with { Alias = pair.Value.Alias.Trim() }))
                 throw new ArgumentException("Invalid device preference.");
         }
-        Sort = sort; IconMode = iconMode;
+        Sort = sort; IconMode = iconMode; IconStyle = iconStyle;
         Devices = new ReadOnlyDictionary<string, DevicePreference>(copy);
     }
     public DevicePreference For(string? key) => key is not null && Devices.TryGetValue(key, out var preference) ? preference : Unconfigured;
